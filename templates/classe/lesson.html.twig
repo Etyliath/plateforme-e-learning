@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Lessons{% endblock %}
+
+{% block body %}
+    <h1>Mes leçons</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>leçon </th>
+                <th> valider </th>
+                <th style="width: 200px" >Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lesson in myLessons %}
+                <tr>
+                    <td colspan="3" class="fs-5 " >{{lesson.lesson.programme}}</td>
+                </tr>
+                <tr>
+                    
+                    <td class="ps-4" >{{lesson.lesson}}</td>
+                    <td> 
+                        {% if lesson.validated %}
+                            <div>Oui</div>
+                        {% else %}
+                            <div>Non</div>
+                        {% endif %}
+                    </td>
+                    <td> <a class="btn btn-primary btn-sm " href=""> Valider</a> </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

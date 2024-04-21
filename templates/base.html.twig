@@ -28,14 +28,14 @@
                             <li class="nav-item">
                                 <a class="nav-link {{app.current_route starts with 'home.' ? 'active' : ''}} " href=" {{ path('home.index') }} ">Accueil</a>
                             </li>
-                            {# <li class="nav-item">
-                                <a class="nav-link {{app.current_route == 'catalogue' ? 'active' : ''}} " href=" {{ path('catalogue') }} ">Catalogue</a>
-                            </li> #}
-                            {# {% if is_granted('ROLE_USER') %}
+                            <li class="nav-item">
+                                <a class="nav-link {{app.current_route == 'classe' ? 'active' : ''}} " href=" {{ path('classe.index') }} ">Classes</a>
+                            </li>
+                            {% if is_granted('ROLE_USER') %}
                                 <li class="nav-item">
-                                    <a class="nav-link {{app.current_route starts with 'lesson.' ? 'active' : ''}} " href=" {{ path('lesson.index') }} ">Mes leçons</a>
+                                    <a class="nav-link {{app.current_route == 'classe.lesson' ? 'active' : ''}} " href=" {{ path('classe.lesson') }} ">Mes leçons</a>
                                 </li>
-                            {% endif %} #}
+                            {% endif %}
                         </ul>
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             {% if is_granted('ROLE_ADMIN') %}

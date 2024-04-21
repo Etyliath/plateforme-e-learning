@@ -21,6 +21,15 @@ class LessonRepository extends ServiceEntityRepository
         parent::__construct($registry, Lesson::class);
     }
 
+    public function findByProgrammeId($value): array
+    {
+        return $this->createQueryBuilder('l')
+            ->where('l.programme = :val')
+            ->setParameter('val',$value)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Lesson[] Returns an array of Lesson objects
     //     */
