@@ -46,12 +46,17 @@ class Lesson
     #[ORM\OneToMany(targetEntity: MyLesson::class, mappedBy: 'lesson')]
     private Collection $myLessons;
 
-    #[ORM\ManyToOne(inversedBy: 'lessons')]
+    #[ORM\ManyToOne(inversedBy: 'lessons', cascade: ['persist'])]
     private ?Programme $programme = null;
 
     public function __construct()
     {
         $this->myLessons = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
