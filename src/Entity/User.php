@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -39,6 +41,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
+
+    /**
+     * @var Collection<int, MyLesson>
+     */
+    #[ORM\OneToMany(targetEntity: MyLesson::class, mappedBy: 'user')]
+    private Collection $myLessons;
+
+    public function __construct()
+    {
+        $this->myLessons = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,6 +148,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MyLesson>
+     */
+    public function getMyLessons(): Collection
+    {
+        return $this->myLessons;
+    }
+
+    public function addMyLesson(MyLesson $myLesson): static
+    {
+        if (!$this->myLessons->contains($myLesson)) {
+            $this->myLessons->add($myLesson);
+            $myLesson->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMyLesson(MyLesson $myLesson): static
+    {
+        if ($this->myLessons->removeElement($myLesson)) {
+            // set the owning side to null (unless already changed)
+            if ($myLesson->getUser() === $this) {
+                $myLesson->setUser(null);
+            }
+        }
 
         return $this;
     }
