@@ -38,7 +38,7 @@
                             {% endif %} #}
                         </ul>
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            {% if is_granted('ROLE_USER') %}
+                            {% if is_granted('ROLE_ADMIN') %}
                                 <li class="nav-item">
                                     <a class="nav-link me-4 {{app.current_route == 'admin' ? 'active' : ''}} " href=" {{ path('admin') }} ">Admin</a>
                                 </li>
