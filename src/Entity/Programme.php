@@ -33,25 +33,23 @@ class Programme
     #[ORM\Column(length: 255)]
     private ?string $updated_by = null;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'programmes')]
-    private ?self $theme = null;
-
-    /**
-     * @var Collection<int, self>
-     */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'theme')]
-    private Collection $programmes;
-
     /**
      * @var Collection<int, Lesson>
      */
-    #[ORM\OneToMany(targetEntity: Lesson::class, mappedBy: 'programme')]
+    #[ORM\OneToMany(targetEntity: Lesson::class, mappedBy: 'programme', cascade: ['remove'])]
     private Collection $lessons;
+
+    #[ORM\ManyToOne(inversedBy: 'programmes')]
+    private ?Theme $theme = null;
 
     public function __construct()
     {
-        $this->programmes = new ArrayCollection();
         $this->lessons = new ArrayCollection();
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -131,48 +129,6 @@ class Programme
         return $this;
     }
 
-    public function getTheme(): ?self
-    {
-        return $this->theme;
-    }
-
-    public function setTheme(?self $theme): static
-    {
-        $this->theme = $theme;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, self>
-     */
-    public function getProgrammes(): Collection
-    {
-        return $this->programmes;
-    }
-
-    public function addProgramme(self $programme): static
-    {
-        if (!$this->programmes->contains($programme)) {
-            $this->programmes->add($programme);
-            $programme->setTheme($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProgramme(self $programme): static
-    {
-        if ($this->programmes->removeElement($programme)) {
-            // set the owning side to null (unless already changed)
-            if ($programme->getTheme() === $this) {
-                $programme->setTheme(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Lesson>
      */
@@ -199,6 +155,18 @@ class Programme
                 $lesson->setProgramme(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTheme(): ?Theme
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?Theme $theme): static
+    {
+        $this->theme = $theme;
 
         return $this;
     }
