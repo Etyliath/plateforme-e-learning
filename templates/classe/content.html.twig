@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+{% block title %}Contenu du cours{% endblock %}
+{% block body %}
+    <div class="container mt-4">
+        <a class="ms-3" href="{{ path('home.index') }}">Accueil</a>
+        <a class="ms-3" href="{{ path('classe.lesson') }}">Retour a mes leçons</a>
+        <h3 class="mt-3" > {{ lesson.name }} </h3>
+        <h5 class="my-3" > {{ lesson.description }} </h5>
+        <p> {{ lesson.content }} </p>
+        {% if myLesson.validated %}
+            <div class="btn btn-success btn-sm "> terminer </div>
+        {% else %}
+            <a class="btn btn-primary btn-sm " href="{{ path('classe.validate', {id:lesson.id}) }}"> Valider </a>
+        {% endif %}
+    </div>
+{% endblock %}

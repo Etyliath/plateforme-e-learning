@@ -20,15 +20,18 @@ class ClasseController extends AbstractController
     #[Route('/classe', name: 'classe.index')]
     public function index(ThemeRepository $themeRepository,
     ProgrammeRepository $cursusRepository,
-    LessonRepository $lessonRepository): Response
+    LessonRepository $lessonRepository,
+    MyLessonRepository $myLessonRepository): Response
     {
         $themes = $themeRepository->findAll();
         $programmes = $cursusRepository->findAll();
         $lessons = $lessonRepository->findAll();
+        $myLessons = $myLessonRepository->findByUser($this->getUser());
         return $this->render('classe/index.html.twig', [
             'themes' => $themes,
             'programmes' => $programmes,
-            'lessons' => $lessons
+            'lessons' => $lessons,
+            'myLessons' => $myLessons
         ]);
     }
 
@@ -47,10 +50,10 @@ class ClasseController extends AbstractController
         ]);
         if(!$myLesson){
             $this->addMyLesson($em, $lesson);
-            $this->addFlash('success','La leçon à bien été ajouté');
+            $this->addFlash('success',$lesson->getName() . ' à bien été ajouté');
             return $this->redirectToRoute('classe.index');
         }else{
-            $this->addFlash('warning','vous pocèder déjà cette leçon');
+            $this->addFlash('warning','la leçon' .$lesson->getName() . ' est déjà en votre possesion');
             return $this->redirectToRoute('classe.index');
         }
         
@@ -72,27 +75,71 @@ class ClasseController extends AbstractController
                 'lesson' => $lesson
             ]);
             if(!$myLesson){
-                $this->addMyLesson($em, $lesson);
-                $this->addFlash('success','La leçon à bien été ajouté');
-                
+                $tmpLessons []= $lesson;
             }else{
-                $this->addFlash('warning','vous pocèder déjà cette leçon');
+                $this->addFlash('warning','la leçon' . $lesson->getName() . ' est déjà en votre possesion');
+                return $this->redirectToRoute('classe.index');
             } 
+        }
+        foreach($tmpLessons as $tmpLesson){
+            $this->addMyLesson($em, $tmpLesson);
+            $this->addFlash('success',$tmpLesson->getName() . ' à bien été ajouté');
 
         }
         return $this->redirectToRoute('classe.index');
     }
 
     #[Route('/classe/lesson', name: 'classe.lesson')]
-    public function lesson(MyLessonRepository $myLessonRepository,ProgrammeRepository $programmeRepository): Response
+    public function lesson(MyLessonRepository $myLessonRepository): Response
     {
-
-        $myLessons = $myLessonRepository->findAll();
+        $myLessons = $myLessonRepository->findByUser($this->getUser());
+        foreach($myLessons as $myLesson){
+            $tmpProgrammes[] = $myLesson->getLesson()->getProgramme();
+        }
+        $programmes = array_unique($tmpProgrammes);
         return $this->render('classe/lesson.html.twig', [
+            'programmes' => $programmes,
             'myLessons' => $myLessons,
         ]);
     }
 
+    #[Route('/classe/content/{id}', name:'classe.content')]
+    public function content(Lesson $lesson, MyLessonRepository $myLessonRepository)
+    {
+        $myLesson = $myLessonRepository->findOneBy([
+            'user'=>$this->getUser(),
+            'lesson' => $lesson
+        ]);
+        //dd($myLesson);
+        return $this->render('classe/content.html.twig',[
+            "lesson" => $lesson,
+            "myLesson" => $myLesson
+        ]);
+    }
+
+    #[Route('/classe/content/validate/{id}', name:'classe.validate')]
+    public function validate(Lesson $lesson, MyLessonRepository $myLessonRepository,
+    EntityManagerInterface $em)
+    {
+
+        $myLesson = $myLessonRepository->findOneBy([
+            'user'=>$this->getUser(),
+            'lesson' => $lesson
+        ]);
+        $myLesson->setValidated(true);
+        $myLesson->setUpdatedAt(new DateTimeImmutable());
+        $myLesson->setUpdatedBy($this->getUser()->getEmail());
+        $em->flush();
+        return $this->redirectToRoute('classe.lesson');
+    }
+    
+    /**
+     * addMyLesson
+     *
+     * @param  mixed $em
+     * @param  mixed $lesson
+     * @return void
+     */
     private function addMyLesson(EntityManagerInterface $em, Lesson $lesson )
     {
         $myLessonAdd = new MyLesson();

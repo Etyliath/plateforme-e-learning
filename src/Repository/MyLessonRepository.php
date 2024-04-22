@@ -20,6 +20,14 @@ class MyLessonRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, MyLesson::class);
     }
+    public function findByUser($user): array
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.user= :user')
+            ->setParameter('user',$user)
+            ->getQuery()
+            ->getResult();
+    }
 
     //    /**
     //     * @return MyLesson[] Returns an array of MyLesson objects

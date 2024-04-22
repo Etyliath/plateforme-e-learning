@@ -27,3 +27,7 @@ header{
 .alert-success{
     background-color: var(--success-color);
 }
+
+.active{
+    text-decoration: underline;
+}
