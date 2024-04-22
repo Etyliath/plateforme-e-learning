@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Classes{% endblock %}
+{% block body %}
+    <h1>Les Cours</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="fs-5 " >Designation </th>
+                <th class="fs-5 style="width: 200px" >Prix</th>
+                <th class="fs-5 style="width: 200px" >Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for theme in themes %}
+            <tr>
+                <td colspan="3" class="fs-4 fw-bolder bg-body-secondary " >{{theme.name}}</td>
+                {% for programme in programmes %}
+                    <tr>
+                        {% if theme.name == programme.theme %}
+                            <tr>
+                                <td class="fs-6 fw-bolder ps-1" >{{programme.name}}</td>
+                                <td>{{programme.price/100}} €</td>
+                                <td colspan="">
+                                    {% if is_granted('ROLE_USER') %}
+                                                {% set sell = false %}
+                                                {% for myLesson in myLessons %}
+                                                    {% if programme == myLesson.lesson.programme %}
+                                                        {% set sell = true %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if sell %}
+                                                 <div class="btn btn-success btn-sm ms-2">Pris</div>
+                                                {% else %}
+                                                <a class="btn btn-primary btn-sm ms-2" href="{{ path('classe.purchase.programme', {id:programme.id})}}">
+                                                    Acheter
+                                                </a>
+                                                {% endif %}
+                                    
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% for lesson in lessons %}
+                                {% if programme.name == lesson.programme %}
+                                    <tr>
+                                        <td class=" ps-3">{{lesson.name}}</td>
+                                        <td class=" ps-3">{{lesson.price/100}} €</td>
+                                        <td>
+                                            {% if is_granted('ROLE_USER') %}
+                                                {% set sell = false %}
+                                                {% for myLesson in myLessons %}
+                                                    {% if lesson == myLesson.lesson %}
+                                                        {% set sell = true %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if sell %}
+                                                 <div class="btn btn-success btn-sm ms-2">Pris</div>
+                                                {% else %}
+                                                <a class="btn btn-primary btn-sm ms-2" href="{{ path('classe.purchase.lesson', {id:lesson.id}) }}">
+                                                    Acheter
+                                                </a>
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
