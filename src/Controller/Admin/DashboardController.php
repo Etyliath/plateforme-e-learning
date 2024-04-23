@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Lesson;
+use App\Entity\MyLesson;
 use App\Entity\Programme;
 use App\Entity\Theme;
 use App\Entity\User;
@@ -35,6 +36,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Theme','fa fa-layer-group',Theme::class);
         yield MenuItem::linkToCrud('Programme','fa fa-graduation-cap',Programme::class);
         yield MenuItem::linkToCrud('Lesson','fa fa-book-open-reader',Lesson::class);
+        yield MenuItem::linkToCrud('My Lesson','fa fa-book-open-reader',MyLesson::class);
         yield MenuItem::linkToCrud('User', 'fas fa-user', User::class);
     }
 }

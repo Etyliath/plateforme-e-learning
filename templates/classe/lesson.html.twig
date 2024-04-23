@@ -12,6 +12,7 @@
             </tr>
         </thead>
         <tbody>
+            {% if programmes %}
             {% for programme in programmes %}
                 <tr>
                     <td colspan="2" class="fs-5 " >{{programme.name}}</td>
@@ -37,6 +38,7 @@
                 {% endfor %}
                 
             {% endfor %}
+            {% endif %}
         </tbody>
     </table>
 {% endblock %}

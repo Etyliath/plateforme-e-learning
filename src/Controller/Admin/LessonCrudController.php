@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Lesson;
+use App\Entity\Programme;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;

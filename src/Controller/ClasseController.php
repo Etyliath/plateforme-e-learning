@@ -93,14 +93,22 @@ class ClasseController extends AbstractController
     public function lesson(MyLessonRepository $myLessonRepository): Response
     {
         $myLessons = $myLessonRepository->findByUser($this->getUser());
+        $programmes=[];
         foreach($myLessons as $myLesson){
-            $tmpProgrammes[] = $myLesson->getLesson()->getProgramme();
+            $programmes[] = $myLesson->getLesson()->getProgramme();
         }
-        $programmes = array_unique($tmpProgrammes);
-        return $this->render('classe/lesson.html.twig', [
-            'programmes' => $programmes,
-            'myLessons' => $myLessons,
-        ]);
+        if(!empty($programmes)){
+            $programmes = array_unique($programmes);
+            return $this->render('classe/lesson.html.twig', [
+                'programmes' => $programmes,
+                'myLessons' => $myLessons,
+            ]);
+        }else{
+            return $this->render('classe/lesson.html.twig', [
+                'programmes' => $programmes,
+                'myLessons' => $myLessons,
+            ]);
+        }
     }
 
     #[Route('/classe/content/{id}', name:'classe.content')]
