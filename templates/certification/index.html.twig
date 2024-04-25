@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Certification{% endblock %}
+
+{% block body %}
+    <h1>Certification</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="fs-5 " >Thème </th>
+                <th class="fs-5" style="width: 200px" >Certification</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for themeCertificate in themesCertificate %}
+                <tr>
+                    <td>
+                        <h4 class="m-0" > {{ themeCertificate.theme }} </h4>
+                    </td>
+                    <td>
+                        {% if themeCertificate.certficate %}
+                            <div>Acquise</div>
+                        {% else %}
+                            <div>Non Acquise</div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

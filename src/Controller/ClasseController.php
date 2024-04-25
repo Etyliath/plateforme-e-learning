@@ -125,6 +125,14 @@ class ClasseController extends AbstractController
         ]);
     }
 
+    
+    /**
+     * validate
+     *
+     * @param  mixed $lesson
+     * @param  mixed $myLessonRepository
+     * @return void
+     */
     #[Route('/classe/content/validate/{id}', name:'classe.validate')]
     public function validate(Lesson $lesson, MyLessonRepository $myLessonRepository,
     EntityManagerInterface $em)

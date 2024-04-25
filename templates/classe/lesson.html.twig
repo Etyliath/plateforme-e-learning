@@ -15,7 +15,7 @@
             {% if programmes %}
             {% for programme in programmes %}
                 <tr>
-                    <td colspan="2" class="fs-5 " >{{programme.name}}</td>
+                    <td colspan="2" class="fs-5 " > {{ programme.theme }}: {{programme.name}} </td>
                 </tr>
                 {% for lesson in myLessons %}
                     {% if lesson.lesson.programme == programme %}
