@@ -2,10 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\MyLesson;
 use App\Repository\LessonRepository;
 use App\Repository\MyLessonRepository;
-use App\Repository\ProgrammeRepository;
 use App\Repository\ThemeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +14,13 @@ class CertificationController extends AbstractController
     #[Route('/certification', name: 'certification.index')]
     public function index(LessonRepository $lessonRepository,
     ThemeRepository $themeRepository,
-    ProgrammeRepository $programmeRepository, 
     MyLessonRepository $myLessonRepository): Response
     {
         $themesCertficated = [];
         $themes = $themeRepository->findAll();
+        /**
+         * loop for get themes have a certification validate for a user
+         */
         foreach($themes as $theme){
             $programmes = $theme->getProgrammes();
             $programmeValidate = [];

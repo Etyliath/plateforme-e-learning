@@ -4,12 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -23,6 +22,8 @@ class UserCrudController extends AbstractCrudController
         //yield IdField::new('id');
         yield Field::new('username');
         yield EmailField::new('email');
+        yield Field::new('password')
+            ->onlyOnForms();
         $roles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_USER'];
         yield ChoiceField::new('roles')
             ->setChoices(array_combine($roles, $roles))

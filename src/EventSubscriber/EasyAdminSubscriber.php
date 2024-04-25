@@ -1,17 +1,14 @@
 <?php
 namespace App\EventSubscriber;
 
-use App\Entity\Cursus;
 use App\Entity\Lesson;
 use App\Entity\Programme;
 use App\Entity\Theme;
 use DateTimeImmutable;
-
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
-use phpDocumentor\Reflection\Types\This;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
@@ -28,8 +25,10 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * setDateTimeAndByUserCreate
-     *put and update datetime for create_at up au on entity declared in dashboard EasyAdmin
+     * setDateTimeAndByUserToCreateEntity
+     * put datetime on field created_at and updated_at
+     * put user on field created_by and update_at
+     * when a entity(theme, progarmme, lesson) is persist in dashboard EasyAdmin
      * @param  mixed $event
      * @return void
      */
@@ -49,6 +48,15 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
     }
 
+        
+    /**
+     * setDateTimeAndByUserToUpdateEntity
+     * update datetime on field updated_at
+     * update user on field update_at
+     * when a entity(theme, progarmme, lesson) is updated in dashboard EasyAdmin
+     * @param  mixed $event
+     * @return void
+     */
     public function setDateTimeAndByUserToUpdateEntity(BeforeEntityUpdatedEvent $event)
     {
         $entity = $event->getEntityInstance();
@@ -64,7 +72,14 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         }
 
     }
-
+    
+    /**
+     * createUpdateProperiesEntity
+     * function call to put data on fields
+     * updated_at, updated_by, created_at, createed_by on enttiy
+     * @param  mixed $entity
+     * @return void
+     */
     private function createUpdateProperiesEntity($entity)
     {
         $userMail = $this->security->getUser()->getEmail();
