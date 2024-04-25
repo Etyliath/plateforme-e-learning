@@ -10,7 +10,6 @@ use App\Repository\MyLessonRepository;
 use App\Repository\ProgrammeRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +17,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ClasseController extends AbstractController
 {
     #[Route('/classe', name: 'classe.index')]
+    /**
+     * display all classes
+     *
+     * @param  mixed $themeRepository
+     * @return void
+     */
     public function index(ThemeRepository $themeRepository,
     ProgrammeRepository $cursusRepository,
     LessonRepository $lessonRepository,
@@ -35,15 +40,19 @@ class ClasseController extends AbstractController
         ]);
     }
 
-    #[Route('/classe/purchase-lesson/{id}', name: 'classe.purchase.lesson')]
+    #[Route('/classe/purchase-lesson/{id}', name: 'classe.purchase.lesson')]    
+    /**
+     * buy a Lesson
+     *
+     * @param  mixed $id
+     * @return void
+     */
     public function addLesson(int $id,
         LessonRepository $lessonRepository,
         MyLessonRepository $myLessonRepository,
         EntityManagerInterface $em): Response
     {
-        //faire test
         $lesson = $lessonRepository->find($id);
-
         $myLesson = $myLessonRepository->findBy([
             'user'=>$this->getUser(),
             'lesson' => $lesson
@@ -60,6 +69,12 @@ class ClasseController extends AbstractController
     }
 
     #[Route('/classe/purchase-programme/{id}', name: 'classe.purchase.programme')]
+    /**
+     * buy a programme 
+     *
+     * @param  mixed $id
+     * @return void
+     */
     public function addProgramme(int $id,
         LessonRepository $lessonRepository,
         ProgrammeRepository $programmeRepository,
@@ -90,6 +105,12 @@ class ClasseController extends AbstractController
     }
 
     #[Route('/classe/lesson', name: 'classe.lesson')]
+    /**
+     * display lesson buy by a user
+     *
+     * @param  mixed $myLessonRepository
+     * @return Response
+     */
     public function lesson(MyLessonRepository $myLessonRepository): Response
     {
         $myLessons = $myLessonRepository->findByUser($this->getUser());
@@ -112,6 +133,13 @@ class ClasseController extends AbstractController
     }
 
     #[Route('/classe/content/{id}', name:'classe.content')]
+    /**
+     * display content of a lesson
+     *
+     * @param  mixed $lesson
+     * @param  mixed $myLessonRepository
+     * @return void
+     */
     public function content(Lesson $lesson, MyLessonRepository $myLessonRepository)
     {
         $myLesson = $myLessonRepository->findOneBy([
@@ -125,15 +153,14 @@ class ClasseController extends AbstractController
         ]);
     }
 
-    
+    #[Route('/classe/content/validate/{id}', name:'classe.validate')]
     /**
-     * validate
+     * validate a lesson for a user connected
      *
      * @param  mixed $lesson
      * @param  mixed $myLessonRepository
      * @return void
      */
-    #[Route('/classe/content/validate/{id}', name:'classe.validate')]
     public function validate(Lesson $lesson, MyLessonRepository $myLessonRepository,
     EntityManagerInterface $em)
     {
@@ -150,7 +177,7 @@ class ClasseController extends AbstractController
     }
     
     /**
-     * addMyLesson
+     * add a Lesson and user on database table MyLesson
      *
      * @param  mixed $em
      * @param  mixed $lesson
