@@ -37,6 +37,9 @@ class MyLesson
     #[ORM\Column(length: 255)]
     private ?string $updated_by = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $sessionId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -134,6 +137,18 @@ class MyLesson
     public function setUpdatedBy(string $updated_by): static
     {
         $this->updated_by = $updated_by;
+
+        return $this;
+    }
+
+    public function getSessionId(): ?string
+    {
+        return $this->sessionId;
+    }
+
+    public function setSessionId(string $sessionId): static
+    {
+        $this->sessionId = $sessionId;
 
         return $this;
     }

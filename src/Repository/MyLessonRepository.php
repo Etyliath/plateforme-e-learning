@@ -29,6 +29,17 @@ class MyLessonRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findBySessionId(string $sessionId): array
+    {
+           return $this->createQueryBuilder('m')
+               ->Where('m.sessionId = :val')
+               ->setParameter('val', $sessionId)
+               ->getQuery()
+               ->getResult()
+           ;
+    
+    }
+
     //    /**
     //     * @return MyLesson[] Returns an array of MyLesson objects
     //     */
