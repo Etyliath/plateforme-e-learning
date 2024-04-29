@@ -1,3 +1,33 @@
-body {
-    background-color: skyblue;
+:root {
+    --main-bg-color: #f1f8fc;
+    --second-bg-color: #0074c7;
+    --main-text-color: #384050;
+    --title-text-color: #00497c;
+    --danger-color: #cd2c2e;
+    --success-color: #82b864;
+
+}
+
+body, html {
+    font-family: 'Comic sans MS', sans-serif;
+    background-color: var(--main-bg-color);
+}
+header{
+    background-color: rgba(0, 116, 199, 0.7);
+}
+
+.btn-primary{
+    background-color: rgba(0, 116, 199, 0.7);
+}
+
+.alert-danger{
+    background-color: var(--danger-color);
+}
+
+.alert-success{
+    background-color: var(--success-color);
+}
+
+.active{
+    text-decoration: underline;
 }

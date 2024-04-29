@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Lessons{% endblock %}
+
+{% block body %}
+    <h1>Mes leçons</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="fs-4 " >leçons </th>
+                <th class="fs-4 style="width: 200px" >Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if programmes %}
+            {% for programme in programmes %}
+                <tr>
+                    <td colspan="2" class="fs-5 " > {{ programme.theme }}: {{programme.name}} </td>
+                </tr>
+                {% for lesson in myLessons %}
+                    {% if lesson.lesson.programme == programme %}
+                        <tr>
+                            <td class="ps-4" >{{lesson.lesson}}</td>
+                            <td> 
+                                {% if lesson.validated %}
+                                    <a class="btn btn-success btn-sm " href="{{ path('classe.content', {id:lesson.lesson.id}) }}">
+                                        terminer
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-primary btn-sm " href="{{ path('classe.content', {id:lesson.lesson.id}) }}">
+                                        Commencer
+                                    </a>
+                                {% endif %}
+                                
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}
